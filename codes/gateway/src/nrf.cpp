@@ -9,7 +9,6 @@ const byte rxAddress[6] = "RB2PC"; // Canal Robot vers PC
 
 
 bool init_NRF() {
-    radio = RF24(PIN_CE, PIN_CS);
 
     if (!radio.begin()) return false;
 
@@ -17,8 +16,10 @@ bool init_NRF() {
     radio.setDataRate(RF24_250KBPS);
     radio.setChannel(108);
     radio.setPayloadSize(32);
+    
     radio.openWritingPipe(txAddress);
     radio.openReadingPipe(1, rxAddress);
+    
     radio.startListening();
 
     return true;
@@ -35,18 +36,19 @@ bool send_NRF(const char* text) {
 bool read_NRF(char* buffer) {
     if (!radio.available()) return false;
 
-    radio.read(&buffer, sizeof(buffer));
+    radio.read(buffer, 32);
 
     return true;
 }
 
 
-int ping_NRF(uint8_t attempts = 10, uint16_t delayMs = 100) {
+int ping_NRF(uint8_t attempts, uint16_t delayMs) {
 
     float total = 0;
     uint8_t success = 0;
-    static char buffer[32];
+    char buffer[32];
 
+    uint8_t timout_count = 0;
     for (uint8_t i = 0; i < attempts; i++) {
         unsigned long start = millis();
         send_NRF(":::PING:STRING:HELLO");
@@ -56,7 +58,7 @@ int ping_NRF(uint8_t attempts = 10, uint16_t delayMs = 100) {
         unsigned long timeout = millis();
         while (millis() - timeout < 1000) {
             if (read_NRF(buffer)) {
-                if (strncmp(buffer, ":::PONG:STRING:", 16) == 0) {
+                if (strncmp(buffer, ":::PONG", 7) == 0) {
                     unsigned long elapsed = millis() - start;
 
                     total += elapsed;
@@ -68,7 +70,13 @@ int ping_NRF(uint8_t attempts = 10, uint16_t delayMs = 100) {
             }
         }
 
-        if (!received) Serial.println("[PING] TIMEOUT");
+        if (!received) {
+            timout_count++;
+            if (timout_count==5) {
+                Serial.println("TIMEOUT");
+                return 0;
+            }
+        }
         delay(delayMs);
     }
 

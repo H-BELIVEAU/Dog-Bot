@@ -22,5 +22,5 @@
 extern Adafruit_PWMServoDriver pwm;
 
 
-void init_servo();
+bool init_servo();
 void set_servo_position(uint8_t id, uint8_t pos);

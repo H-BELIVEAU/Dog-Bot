@@ -36,12 +36,10 @@ bool parsePacket(const char* input) {
 
 
 void processPacket() {
-  if (strcmp(key, "PING") == 0) send_NRF(":::PONG:STRING:OK");
-
   if (strncmp(key, "Servo_", 6) == 0) {
-    static bool front = rawdata[0] == 'F';
-    static bool left = rawdata[1] == 'L';
-    static uint8_t joint = rawdata[2] == 'S'? 0 : rawdata[2] == 'A' ? 1 : 2;
+    bool front = key[6] == 'F';
+    bool left = key[7] == 'L';
+    uint8_t joint = key[8] == 'S'? 0 : key[8] == 'A' ? 1 : 2;
 
          if (front && left && joint==0)  set_servo_position(SERVO_FL_SHOULDER,  atoi(rawdata));
     else if (front && left && joint==1)  set_servo_position(SERVO_FL_ANKLE,     atoi(rawdata));
@@ -62,9 +60,23 @@ void setup() {
     Serial.begin(115200);
     Serial.println("\n\n[DOGBOT] STARTING");
 
-    if (!init_NRF()) Serial.println("[DOGBOT] (NRF24) INIT ERROR");
+    bool ok_nrf = init_NRF();
+    bool ok_servo = init_servo();
 
-    init_servo();
+    if (!ok_nrf) Serial.println("[DOGBOT] (NRF24) INIT ERROR");
+    if (!ok_servo) Serial.println("[DOGBOT] (PCA9685) INIT ERROR");
+
+    while (!(ok_nrf)) {
+        if (!ok_nrf) {
+            ok_nrf = init_NRF();
+            if (ok_nrf) Serial.println("[DOGBOT] (NRF24) INIT SUCESS");
+        }
+        if (!ok_servo)  {
+            ok_servo = init_servo();
+            if (ok_servo) Serial.println("[DOGBOT] (PCA9685) INIT SUCESS");
+        }
+        delay(1000);
+    }
 
     Serial.println("[DOGBOT] READY");
     send_NRF("[DOGBOT] READY");

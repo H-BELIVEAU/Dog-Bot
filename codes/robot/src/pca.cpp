@@ -4,9 +4,11 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
 
-void init_servo() {
-    pwm.begin();
+bool init_servo() {
+    if (!pwm.begin()) return false;
+    
     pwm.setPWMFreq(60);
+    return true;
 }
 
 

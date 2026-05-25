@@ -2,8 +2,8 @@
 #include <RF24.h>
 
 
-#define PIN_CE  9
-#define PIN_CS  10
+#define PIN_CE  4
+#define PIN_CS  5
 
 
 extern RF24 radio;

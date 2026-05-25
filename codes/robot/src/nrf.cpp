@@ -13,8 +13,6 @@ bool init_NRF() {
 
     delay(100);
 
-    radio = RF24(PIN_CE, PIN_CS);
-
     if (!radio.begin()) return false;
 
     radio.setPALevel(RF24_PA_MIN);
@@ -39,9 +37,9 @@ bool send_NRF(const char* text) {
 bool read_NRF(char* buffer) {
     if (!radio.available()) return false;
 
-    radio.read(&buffer, sizeof(buffer));
+    radio.read(buffer, 32);
 
-    if (strncmp(buffer, ":::PING:", 9) == 0) send_NRF(":::PONG:STRING:OK");
+    if (strncmp(buffer, ":::PING", 7) == 0) send_NRF(":::PONG:STRING:OK");
 
     return true;
 }

@@ -8,11 +8,13 @@ char buffer[32];
 bool read_serial() {
     static uint8_t index = 0;
 
+    char c;
     while (Serial.available()) {
-        static char c = Serial.read();
+        c = Serial.read();
 
         if (c == '\n') {
             buffer[index] = '\0';
+            index = 0;
             return true;
         } else if (index < sizeof(buffer) - 1) buffer[index++] = c;
     }
@@ -39,10 +41,13 @@ void loop() {
         /* COMMANDES PAR DEFAUT ET ENVOI DES DONNEES */
         if (strncmp(buffer, ":::", 3) == 0) send_NRF(buffer);
         if (strncmp(buffer, "CMD:", 4) == 0) {
-            if (buffer == "CMD:PING") {
+            if (strncmp(buffer, "CMD:PING", 8) == 0) {
                 Serial.print("[UNO] (DOG BOT) Average Ping : ");
-                Serial.print(ping_NRF(20, 50));
-                Serial.println(" ms.");
+                uint16_t ping_avg = ping_NRF(20, 50);
+                if (ping_avg!=0) {
+                    Serial.print(ping_avg);
+                    Serial.println(" ms.");
+                }
             }
         }
     }
