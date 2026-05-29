@@ -25,7 +25,7 @@ Dog Bot/
 │   │   └── Arduino UNO code
 │   │
 │   ├── interface/
-│   │   └── PC Python interface
+│   │   └── PC Python interface and tests
 │   │
 │   └── robot/
 │       └── ESP32 robot code
@@ -36,17 +36,11 @@ Dog Bot/
 ├─── electronics/ 
 │   └── Electronics schematics
 │
-└── mechanical/ 
-    ├── fusion/
-    │   └── (.f3d) Fusion 360 files
-    │
-    └── printable/
-        ├── (.stl) 3D printable files
-        └── (+Kobra S1 files)
+└── mechanical/
+    └── (.stl) 3D printable files
 
 ```
 
 ## Documentation
 Documentation folders are Obsidian projects.
 - [French documentation](docs/fr/Projet%20Chien%20Robot.md)
-- [English documentation](docs/en/Dog%20Bog%20Project.md)

@@ -11,7 +11,7 @@
 
 Ce projet consiste à concevoir et réaliser un robot quadrupède piloté à distance, capable d’exécuter plusieurs positions fixes et animations simples.  
 Le système repose sur une architecture distribuée : un PC avec interface Python, un Arduino UNO pour la communication RF, et un ESP32 embarqué sur le robot pour le contrôle des servomoteurs via un PCA9685.  
-Le robot est alimenté par une batterie externe via un UBEC 5V 30A, et sa mécanique est imprimée en PLA.
+Le robot est alimenté par une batterie externe via un UBEC 5V 30A, et sa mécanique est imprimée en PLA et utilise également une base en bois, et quelques vis.
 
 ---
 
@@ -25,7 +25,7 @@ Concevoir un robot quadrupède autonome, piloté à distance, capable d’exécu
 - Animations : marche simple, danse, rotation sur lui-même  
 - Pilotage en temps réel depuis un PC  
 - Communication RF bidirectionnelle  
-- Architecture évolutive pour ajout futur de capteurs  
+- Architecture évolutive pour ajout futur de capteurs, d'un mode autonome, etc.
 
 ## 1.3 Contraintes
 - Budget limité (~100€)

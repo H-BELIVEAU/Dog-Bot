@@ -1,7 +1,6 @@
 #include "nrf.hpp"
 
 
-
 RF24 radio(PIN_CE, PIN_CS);
 
 const byte txAddress[6] = "PC2RB"; // Canal PC vers Robot
@@ -9,10 +8,9 @@ const byte rxAddress[6] = "RB2PC"; // Canal Robot vers PC
 
 
 bool init_NRF() {
-
     if (!radio.begin()) return false;
 
-    radio.setPALevel(RF24_PA_MIN);
+    radio.setPALevel(RF24_PA_MIN); // Pas besoin de beaucoup de puissance (le robot est très proche)
     radio.setDataRate(RF24_250KBPS);
     radio.setChannel(108);
     radio.setPayloadSize(32);
@@ -41,7 +39,9 @@ bool read_NRF(char* buffer) {
     return true;
 }
 
-
+// Fonction de ping pour tester la communication bidirectionnelle
+// Renvoie le temps moyen d'aller-retour en millisecondes
+// A partir de 5 échecs, on considère la connexions trop peu fiable
 int ping_NRF(uint8_t attempts, uint16_t delayMs) {
 
     float total = 0;

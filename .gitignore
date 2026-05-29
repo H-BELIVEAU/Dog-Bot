@@ -1,6 +1,9 @@
 .pio
 .vscode
-.gitignore
-dogbot.code-workspace
 .obsidian
 .git
+.venv
+.idea
+
+.gitignore
+dogbot.code-workspace
